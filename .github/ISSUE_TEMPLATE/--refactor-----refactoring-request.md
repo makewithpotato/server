@@ -1,9 +1,10 @@
 ---
-name: '[ Refactor ] - Refactoring request'
+name: "[ Refactor ] - Refactoring request"
 about: "\U0001F3A8 Refactor Template"
-title: '[ Refactor ] - '
-labels: "refactor \U0001F3A8"
+title: "[refactor]  "
+labels: "♻️ refactor"
 assignees: ''
+
 ---
 
 ## 🛠️ Feature to Refactor

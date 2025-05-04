@@ -1,9 +1,10 @@
 ---
-name: '[  Bug ] - Bug report'
-about: '❗ Bug Template'
-title: '[ Bug ] - '
-labels: bug ❗
+name: "[  Bug ] - Bug report"
+about: "❗ Bug Template"
+title: "[fix] "
+labels: "\U0001F41B bug"
 assignees: ''
+
 ---
 
 ## 🛠️ Affected Feature
