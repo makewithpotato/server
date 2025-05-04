@@ -8,13 +8,10 @@ assignees: ''
 ---
 
 ## 🛠️ Feature to Refactor
-
-Describe the feature or screen to be refactored.
+<!-- 리팩토링하려는 기능이나 화면에 대해 설명해주세요. -->
 
 ## 📝 Reason for Refactoring
-
-Explain why and how you plan to refactor this feature.
+<!-- 왜 이 기능을 리팩토링하려고 하는지, 리팩토링을 통해 무엇을 개선하려고 하는지 설명해주세요. -->
 
 ## ✅ Checklist
-
--   []
+- [ ]
