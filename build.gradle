@@ -52,3 +52,11 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+jar {
+    enabled = false
+}
+
+bootJar {
+    archiveFileName = 'programbook-server-0.0.1-SNAPSHOT.jar'
+}
