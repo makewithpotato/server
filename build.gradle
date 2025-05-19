@@ -47,6 +47,9 @@ dependencies {
     // postgresql
     implementation 'org.postgresql:postgresql:42.6.0'
 
+    //aws
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.541'
+
 }
 
 tasks.named('test') {
