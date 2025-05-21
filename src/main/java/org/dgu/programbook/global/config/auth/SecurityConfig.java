@@ -26,6 +26,7 @@ public class SecurityConfig {
     // 토큰 없이 접근 가능한 URL
     private static final String[] whiteList = {"/",
             "api/user/token/**",
+            "api/transcribe/**"
             };
 
     @Bean
