@@ -35,6 +35,10 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+            
+      - name: DEBUG용 APPLICATION_YML 출력
+        run: |
+          echo "${{ secrets.APPLICATION_YML }}"
 
       # 4. make application.yml
       - name: make application.yml
