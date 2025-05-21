@@ -35,10 +35,6 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-            
-      - name: DEBUG용 APPLICATION_YML 출력
-        run: |
-          echo "${{ secrets.APPLICATION_YML }}"
 
       # 4. make application.yml
       - name: make application.yml
@@ -47,7 +43,7 @@ jobs:
           cd ./src/main/resources
           touch ./application.yml
           chmod 644 application.yml
-          echo ${{secrets.APPLICATION_YML}} | base64 --decode > ./application.yml
+          echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > ./application.yml
 
        # 5. Build with Gradle 
       - name: Grant Execute Permission For Gradlew & Build gradle
