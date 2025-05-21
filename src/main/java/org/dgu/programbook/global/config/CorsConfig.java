@@ -21,7 +21,7 @@ public class CorsConfig implements WebMvcConfigurer {
 
         // CORS 허용할 URL
         List<String> allowedOrigins = Arrays.asList(
-                "http://localhost:5000" // 프론트 주소 추가 필요
+                "http://localhost:3000"
         );
 
         config.setAllowedOrigins(allowedOrigins);
