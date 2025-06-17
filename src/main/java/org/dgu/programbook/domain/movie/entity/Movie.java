@@ -15,7 +15,7 @@ public class Movie extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     private String title;
 
@@ -30,7 +30,7 @@ public class Movie extends BaseTimeEntity {
 
     @Builder(builderMethodName = "movieBuilder")
     public Movie(Long id, String title, String thumbnailUrl, String summary, User user) {
-        Id = id;
+        this.id = id;
         this.title = title;
         this.thumbnailUrl = thumbnailUrl;
         this.summary = summary;
