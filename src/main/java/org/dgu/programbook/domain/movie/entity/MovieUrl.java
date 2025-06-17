@@ -1,6 +1,7 @@
 package org.dgu.programbook.domain.movie.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,4 +22,10 @@ public class MovieUrl {
     @Column(name = "movie_url")
     private String movieUrl;
 
+    @Builder
+    public MovieUrl(Long id, Movie movie, String movieUrl) {
+        Id = id;
+        this.movie = movie;
+        this.movieUrl = movieUrl;
+    }
 }
