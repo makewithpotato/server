@@ -1,9 +1,9 @@
 package org.dgu.programbook.domain.s3.service;
 
 import lombok.RequiredArgsConstructor;
-import org.dgu.programbook.domain.s3.controller.TranscribeJobRequestDTO;
+import org.dgu.programbook.domain.s3.dto.request.TranscribeJobRequestDTO;
 import org.dgu.programbook.domain.s3.dto.response.TranscribeJobResponseDTO;
-import org.dgu.programbook.domain.s3.dto.response.TranscribeResultResponse;
+import org.dgu.programbook.domain.s3.dto.response.TranscribeResultResponseDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.transcribe.TranscribeClient;
@@ -45,7 +45,7 @@ public class TranscribeService {
 
 
     // Transcribe Job에 대한 처리 결과 조회
-    public TranscribeResultResponse getTranscriptUrl(String jobName) {
+    public TranscribeResultResponseDTO getTranscriptUrl(String jobName) {
         GetTranscriptionJobResponse response = transcribeClient.getTranscriptionJob(
                 GetTranscriptionJobRequest.builder()
                         .transcriptionJobName(jobName)
@@ -60,6 +60,6 @@ public class TranscribeService {
             case FAILED    -> "처리 실패: " + job.failureReason();
             default        -> "진행 상태: " + status.name();
         };
-        return new TranscribeResultResponse(resultUrl);
+        return new TranscribeResultResponseDTO(resultUrl);
     }
 }
