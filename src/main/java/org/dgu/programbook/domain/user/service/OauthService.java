@@ -39,7 +39,7 @@ public class OauthService {
 
         // JWT 토큰 발급
         // 임시용(리프레쉬 토큰 저장 로직 추가 필요)
-        return userService.issueTempToken(user.getUserId());
+        return userService.issueTempToken(user.getId());
     }
 
 
