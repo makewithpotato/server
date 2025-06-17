@@ -80,7 +80,7 @@ public class MovieService {
         // 1. 멀티 파트 URL 생성
         // 2. 프론트 서버에 전달
 
-        return s3Util.initiateMultipartUpload(createMovieRequest.movie());
+        return s3Util.initiateMultipartUpload(createMovieRequest.totalParts());
     }
 
     // 프론트에서 완료 요청 -> S3에서 영상 URL 전달받아 저장 및 프론트 전달

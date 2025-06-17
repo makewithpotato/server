@@ -6,23 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.dgu.programbook.domain.movie.dto.request.PartEtagDto;
 import org.dgu.programbook.domain.movie.dto.response.CreateUploadResponseDto;
 import org.dgu.programbook.domain.movie.dto.response.PresignedPart;
-import org.dgu.programbook.global.error.ErrorCode;
-import org.dgu.programbook.global.error.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.awscore.presigner.PresignedRequest;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
-import org.springframework.mock.web.MockMultipartFile;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
-
-import java.io.*;
-import java.nio.file.Files;
 import java.time.Duration;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -140,10 +132,7 @@ public class S3Util {
 //    }
 //================================ S3 멀티 파트 + PresignedUrl 도입 ===================================//
 
-    public CreateUploadResponseDto initiateMultipartUpload(MultipartFile videoFile) {
-        long partSize = 10 * 1024 * 1024L; // 20MB로 나눠서 올리기
-        long totalSize = videoFile.getSize();
-        int totalParts = (int) Math.ceil((double) totalSize / partSize);
+    public CreateUploadResponseDto initiateMultipartUpload(Long totalParts) {
 
         // S3에 업로드될 파일 경로 지정
         String objectKey = dir + "/" + UUID.randomUUID(); // 예: dir/uuid/

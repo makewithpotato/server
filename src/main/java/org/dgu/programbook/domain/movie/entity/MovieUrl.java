@@ -13,7 +13,7 @@ public class MovieUrl {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
@@ -24,7 +24,7 @@ public class MovieUrl {
 
     @Builder
     public MovieUrl(Long id, Movie movie, String movieUrl) {
-        Id = id;
+        this.id = id;
         this.movie = movie;
         this.movieUrl = movieUrl;
     }
