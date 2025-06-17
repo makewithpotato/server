@@ -1,16 +1,14 @@
 package org.dgu.programbook.domain.programbook.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.dgu.programbook.domain.programbook.dto.request.ProgramBookSaveRequestDTO;
 import org.dgu.programbook.domain.programbook.dto.response.ProgramBookPdfResponseDTO;
 import org.dgu.programbook.domain.programbook.dto.response.ProgrambookResponseDTO;
 import org.dgu.programbook.domain.programbook.service.ProgrambookService;
 import org.dgu.programbook.global.common.SuccessResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,5 +35,14 @@ public class ProgrambookController {
 
 
     //프로그램북 저장(pdf)
+    @PostMapping
+    public ResponseEntity<?> saveProgrambook(
+            @ModelAttribute ProgramBookSaveRequestDTO programBookSaveRequest,
+            @AuthenticationPrincipal Long userId
+    ) {
+        programbookService.saveProgrambook(programBookSaveRequest,userId);
+        return SuccessResponse.created(null);
+    }
+
 
 }

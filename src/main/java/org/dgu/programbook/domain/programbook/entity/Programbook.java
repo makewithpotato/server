@@ -1,12 +1,15 @@
 package org.dgu.programbook.domain.programbook.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.dgu.programbook.domain.user.entity.User;
 import org.dgu.programbook.global.common.BaseTimeEntity;
 
-
+@AllArgsConstructor
+@Builder
 @Getter
 @NoArgsConstructor
 @Table(name = "programbook")

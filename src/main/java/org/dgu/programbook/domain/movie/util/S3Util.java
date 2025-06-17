@@ -6,8 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.dgu.programbook.domain.movie.dto.request.PartEtagDto;
 import org.dgu.programbook.domain.movie.dto.response.CreateUploadResponseDto;
 import org.dgu.programbook.domain.movie.dto.response.PresignedPart;
+import org.dgu.programbook.global.error.ErrorCode;
+import org.dgu.programbook.global.error.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.awscore.presigner.PresignedRequest;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
@@ -34,23 +37,27 @@ public class S3Util {
     @Value("${cloud.aws.s3.dir}")
     private String dir;
 
-//    //이미지 업로드
-//    public String upload(MultipartFile file) {
-//        try {
-//            String key = dir + "/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
-//            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-//                    .bucket(bucketName)
-//                    .key(key)
-//                    .contentType(file.getContentType())
-//                    .build();
-//            s3Client.putObject(putObjectRequest, software.amazon.awssdk.core.sync.RequestBody.fromBytes(file.getBytes()));
-//
-//            return "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + key;
-//        } catch (Exception e) {
-//            // 파일이 손상되었거나, 읽을 수 없는 경우
-//            throw new BusinessException(ErrorCode.BAD_REQUEST);
-//        }
-//    }
+    @Value("${cloud.aws.s3.dir2}")
+    private String dir2;
+
+    //이미지 업로드
+    public String upload(MultipartFile file) {
+        try {
+            String key = dir2 + "/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .contentType(file.getContentType())
+                    .build();
+            s3Client.putObject(putObjectRequest, software.amazon.awssdk.core.sync.RequestBody.fromBytes(file.getBytes()));
+
+            return "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + key;
+        } catch (Exception e) {
+            // 파일이 손상되었거나, 읽을 수 없는 경우
+            throw new BusinessException(ErrorCode.BAD_REQUEST);
+        }
+    }
+
 //    public List<String> upload(List<MultipartFile> files) {
 //        return files.stream()
 //                .map(this::upload)
