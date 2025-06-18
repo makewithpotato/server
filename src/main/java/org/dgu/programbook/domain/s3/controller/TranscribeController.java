@@ -1,8 +1,9 @@
 package org.dgu.programbook.domain.s3.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.dgu.programbook.domain.s3.dto.request.TranscribeJobRequestDTO;
 import org.dgu.programbook.domain.s3.dto.response.TranscribeJobResponseDTO;
-import org.dgu.programbook.domain.s3.dto.response.TranscribeResultResponse;
+import org.dgu.programbook.domain.s3.dto.response.TranscribeResultResponseDTO;
 import org.dgu.programbook.domain.s3.service.TranscribeService;
 import org.dgu.programbook.global.common.SuccessResponse;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class TranscribeController {
 
     @GetMapping("/result")
     public ResponseEntity<SuccessResponse<?>> result(@RequestParam String jobName) {
-        TranscribeResultResponse transcribeResult = transcribeService.getTranscriptUrl(jobName);
+        TranscribeResultResponseDTO transcribeResult = transcribeService.getTranscriptUrl(jobName);
         return SuccessResponse.ok(transcribeResult);
     }
 }

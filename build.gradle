@@ -56,6 +56,9 @@ dependencies {
     //S3 Multipart
     implementation 'org.springframework.boot:spring-boot-starter-test'
 
+    //pdf
+    implementation 'org.apache.pdfbox:pdfbox:2.0.29'
+
 
 }
 
