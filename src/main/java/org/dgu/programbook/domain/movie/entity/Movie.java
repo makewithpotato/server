@@ -31,10 +31,12 @@ public class Movie extends BaseTimeEntity {
 
     private String thumbnailUrl;
 
+    @Column(columnDefinition = "TEXT")
     private String summary;
 
     private String status;
 
+    @Column(columnDefinition = "TEXT")
     private String review;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -57,11 +59,13 @@ public class Movie extends BaseTimeEntity {
         this.id = id;
     }
 
-    public void
-    updateAnalysisResult(String thumbnailUrl, String review ,String summary, String status) {
+    public void updateAnalysisResult(String thumbnailUrl, String review ,String summary) {
         this.thumbnailUrl = thumbnailUrl;
         this.review = review;
         this.summary = summary;
+    }
+
+    public void updateStatus(String status) {
         this.status = status;
     }
 }

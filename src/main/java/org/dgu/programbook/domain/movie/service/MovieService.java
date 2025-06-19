@@ -130,6 +130,8 @@ public class MovieService {
                 completeUploadRequestDto.presignedParts()
         );
 
+        movie.updateStatus("PENDING");
+
         // 2) AI 서버에 분석 요청
         AnalysisResponse analysis = restClientUtil.requestAnalysis(fileUrl, movie);
 
@@ -137,8 +139,7 @@ public class MovieService {
         movie.updateAnalysisResult(
                 analysis.getThumbnail_folder_uri(),
                 analysis.getFinal_review(),
-                analysis.getFinal_story(),
-                "PENDING"
+                analysis.getFinal_story()
         );
 
         movieRepository.save(movie);
