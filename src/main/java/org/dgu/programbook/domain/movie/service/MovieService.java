@@ -19,6 +19,8 @@ import org.dgu.programbook.global.error.exception.BusinessException;
 import org.hibernate.action.internal.EntityActionVetoException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -136,7 +138,12 @@ public class MovieService {
         movieRepository.save(movie);
 
         // 2) AI 서버에 분석 요청
-        analysisAsyncService.analyzeAndSave(movie, fileUrl);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                analysisAsyncService.analyzeAndSave(movie, fileUrl);
+            }
+        });
         //AnalysisResponse analysis = restClientUtil.requestAnalysis(fileUrl, movie);
 
 //        // 3) Movie 엔티티 생성 및 저장
@@ -156,35 +163,5 @@ public class MovieService {
 //        movieUrlRepository.save(movieUrl);
 
         return true;
-    }
-
-    @Async
-    public void analyzeAndSave(Movie movie, String fileUrl) {
-        try {
-            // AI 서버 분석 요청
-            AnalysisResponse analysis = restClientUtil.requestAnalysis(fileUrl, movie);
-
-            // 분석 결과 저장
-            movie.updateAnalysisResult(
-                    analysis.getThumbnail_folder_uri(),
-                    analysis.getFinal_review(),
-                    analysis.getFinal_story()
-            );
-
-            movieRepository.save(movie);
-
-            MovieUrl movieUrl = MovieUrl.builder()
-                    .movie(movie)
-                    .movieUrl(fileUrl)
-                    .build();
-
-            movieUrlRepository.save(movieUrl);
-
-        } catch (Exception e) {
-            // 실패 시 상태 업데이트 등
-            movie.updateStatus("FAILED_ANALYSIS");
-            movieRepository.save(movie);
-            log.error("AI 분석 실패", e);
-        }
     }
 }
