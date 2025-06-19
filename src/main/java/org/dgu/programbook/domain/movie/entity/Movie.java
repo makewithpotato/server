@@ -8,7 +8,6 @@ import org.dgu.programbook.domain.user.entity.User;
 import org.dgu.programbook.global.common.BaseTimeEntity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -34,8 +33,7 @@ public class Movie extends BaseTimeEntity {
 
     private String summary;
 
-    @Embedded
-    private Status status;
+    private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -43,7 +41,7 @@ public class Movie extends BaseTimeEntity {
 
 
     @Builder(builderMethodName = "movieBuilder")
-    public Movie(Long id, String title, String director, String actor, String genre, LocalDate releaseDate, String thumbnailUrl, String summary, Status status, User user) {
+    public Movie(Long id, String title, String director, String actor, String genre, LocalDate releaseDate, String thumbnailUrl, String summary, String status, User user) {
         this.id = id;
         this.title = title;
         this.director = director;

@@ -7,7 +7,6 @@ import org.dgu.programbook.domain.movie.dto.request.CreateMovieRequest;
 import org.dgu.programbook.domain.movie.dto.response.*;
 import org.dgu.programbook.domain.movie.entity.Movie;
 import org.dgu.programbook.domain.movie.entity.MovieUrl;
-import org.dgu.programbook.domain.movie.entity.Status;
 import org.dgu.programbook.domain.movie.repository.MovieRepository;
 import org.dgu.programbook.domain.movie.repository.MovieUrlRepository;
 import org.dgu.programbook.domain.movie.util.RestClientUtil;
@@ -91,7 +90,7 @@ public class MovieService {
                 .actor(createMovieRequest.actor())
                 .director(createMovieRequest.director())
                 .genre(createMovieRequest.genre())
-                .status(Status.UPLOADING)
+                .status("PENDING")
                 .build();
         movieRepository.save(movie);
 
