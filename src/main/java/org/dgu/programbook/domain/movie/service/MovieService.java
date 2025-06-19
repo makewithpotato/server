@@ -130,7 +130,6 @@ public class MovieService {
                 completeUploadRequestDto.presignedParts()
         );
 
-
         // 2) AI 서버에 분석 요청
         AnalysisResponse analysis = restClientUtil.requestAnalysis(List.of(fileUrl), completeUploadRequestDto.movieId());
 

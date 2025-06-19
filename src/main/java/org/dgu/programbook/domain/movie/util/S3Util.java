@@ -17,6 +17,8 @@ import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -142,7 +144,10 @@ public class S3Util {
     public CreateUploadResponseDto initiateMultipartUpload(Long totalParts) {
 
         // S3에 업로드될 파일 경로 지정
-        String objectKey = dir + "/" + UUID.randomUUID(); // 예: dir/uuid/
+        String timeStamp = LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("MMdd_HHmm"));
+
+        String objectKey = dir + "/" + timeStamp + "_" + UUID.randomUUID() + "/";
 
         // 멀티파트 업로드 시작 요청
         CreateMultipartUploadRequest createRequest = CreateMultipartUploadRequest.builder()
