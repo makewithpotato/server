@@ -27,10 +27,10 @@ public class RestClientUtil {
                 .build();
     }
 
-    public AnalysisResponse requestAnalysis(List<String> videoPartUrls, Movie movie) {
+    public AnalysisResponse requestAnalysis(String videoPartUrls, Movie movie) {
         Map<String, Object> body = Map.of(
                 "s3_folder_path", videoPartUrls,
-                "movieId", movie.getId(),
+                "movie_id", movie.getId(),
                 "characters_info", movie.getActor(),
                 "language_code", "ko-KR",
                 "threshold", 30,
