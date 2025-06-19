@@ -57,7 +57,8 @@ public class Movie extends BaseTimeEntity {
         this.id = id;
     }
 
-    public void updateAnalysisResult(String thumbnailUrl, String review ,String summary, String status) {
+    public void
+    updateAnalysisResult(String thumbnailUrl, String review ,String summary, String status) {
         this.thumbnailUrl = thumbnailUrl;
         this.review = review;
         this.summary = summary;

@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class AnalysisResponse {
-    private String thumbnailUrl;
-    private String summary;
-    private String review;
+    private String thumbnail_folder_uri;
+    private String final_story;
+    private String final_review;
 }

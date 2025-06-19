@@ -3,6 +3,7 @@ package org.dgu.programbook.domain.movie.util;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.dgu.programbook.domain.movie.dto.response.AnalysisResponse;
+import org.dgu.programbook.domain.movie.entity.Movie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -26,10 +27,15 @@ public class RestClientUtil {
                 .build();
     }
 
-    public AnalysisResponse requestAnalysis(List<String> videoPartUrls, Long movieId) {
+    public AnalysisResponse requestAnalysis(List<String> videoPartUrls, Movie movie) {
         Map<String, Object> body = Map.of(
-                "videoUrls", videoPartUrls,
-                "movieId", movieId
+                "s3_folder_path", videoPartUrls,
+                "movieId", movie.getId(),
+                "characters_info", movie.getActor(),
+                "language_code", "ko-KR",
+                "threshold", 30,
+                "init", true
+
         );
 
         ResponseEntity<AnalysisResponse> responseEntity = restClient.post()
@@ -41,4 +47,5 @@ public class RestClientUtil {
         return responseEntity.getBody();
     }
 }
+
 
