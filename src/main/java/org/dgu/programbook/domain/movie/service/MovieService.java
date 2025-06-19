@@ -2,6 +2,7 @@ package org.dgu.programbook.domain.movie.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dgu.programbook.domain.movie.dto.request.CompleteUploadRequestDto;
 import org.dgu.programbook.domain.movie.dto.request.CreateMovieRequest;
 import org.dgu.programbook.domain.movie.dto.response.*;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -82,6 +84,8 @@ public class MovieService {
         // 0. 사용자 조회
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        log.error("createMovieRequest: " + createMovieRequest);
 
         // 1. 영화 정보 저장
         Movie movie = Movie.movieBuilder()
