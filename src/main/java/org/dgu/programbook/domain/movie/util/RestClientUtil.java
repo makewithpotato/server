@@ -29,8 +29,9 @@ public class RestClientUtil {
 
     public AnalysisResponse requestAnalysis(String videoPartUrls, Movie movie) {
         Map<String, Object> body = Map.of(
-                "s3_folder_path", videoPartUrls,
+                "s3_video_uri", videoPartUrls,
                 "movie_id", movie.getId(),
+                "segment_duration", 600,
                 "characters_info", movie.getActor(),
                 "language_code", "ko-KR",
                 "threshold", 30,
