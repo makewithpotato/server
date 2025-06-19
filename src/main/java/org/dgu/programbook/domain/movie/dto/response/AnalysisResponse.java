@@ -6,4 +6,5 @@ import lombok.Data;
 public class AnalysisResponse {
     private String thumbnailUrl;
     private String summary;
+    private String review;
 }

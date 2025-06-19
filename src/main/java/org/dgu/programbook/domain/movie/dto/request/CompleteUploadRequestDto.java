@@ -6,6 +6,7 @@ import java.util.List;
 
 @Builder
 public record CompleteUploadRequestDto(
+        Long movieId,
         String title,
         String uploadId,
         String objectKey,
