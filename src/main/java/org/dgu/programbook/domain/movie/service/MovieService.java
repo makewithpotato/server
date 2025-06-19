@@ -17,6 +17,7 @@ import org.dgu.programbook.domain.user.repository.UserRepository;
 import org.dgu.programbook.global.error.ErrorCode;
 import org.dgu.programbook.global.error.exception.BusinessException;
 import org.hibernate.action.internal.EntityActionVetoException;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class MovieService {
     private final UserRepository userRepository;
     private final RestClientUtil restClientUtil;
     private final MovieUrlRepository movieUrlRepository;
+    private final AnalysisAsyncService analysisAsyncService;
 
     // 업로드 영상 리스트 조회
     public List<ReadMovieListResponse> getMovieList(Long userId) {
@@ -131,26 +133,58 @@ public class MovieService {
         );
 
         movie.updateStatus("PENDING");
-
-        // 2) AI 서버에 분석 요청
-        AnalysisResponse analysis = restClientUtil.requestAnalysis(fileUrl, movie);
-
-        // 3) Movie 엔티티 생성 및 저장
-        movie.updateAnalysisResult(
-                analysis.getThumbnail_folder_uri(),
-                analysis.getFinal_review(),
-                analysis.getFinal_story()
-        );
-
         movieRepository.save(movie);
 
-        MovieUrl movieUrl = MovieUrl.builder()
-                .movie(movie)
-                .movieUrl(fileUrl)
-                .build();
+        // 2) AI 서버에 분석 요청
+        analysisAsyncService.analyzeAndSave(movie, fileUrl);
+        //AnalysisResponse analysis = restClientUtil.requestAnalysis(fileUrl, movie);
 
-        movieUrlRepository.save(movieUrl);
+//        // 3) Movie 엔티티 생성 및 저장
+//        movie.updateAnalysisResult(
+//                analysis.getThumbnail_folder_uri(),
+//                analysis.getFinal_review(),
+//                analysis.getFinal_story()
+//        );
+//
+//        movieRepository.save(movie);
+//
+//        MovieUrl movieUrl = MovieUrl.builder()
+//                .movie(movie)
+//                .movieUrl(fileUrl)
+//                .build();
+//
+//        movieUrlRepository.save(movieUrl);
 
         return true;
+    }
+
+    @Async
+    public void analyzeAndSave(Movie movie, String fileUrl) {
+        try {
+            // AI 서버 분석 요청
+            AnalysisResponse analysis = restClientUtil.requestAnalysis(fileUrl, movie);
+
+            // 분석 결과 저장
+            movie.updateAnalysisResult(
+                    analysis.getThumbnail_folder_uri(),
+                    analysis.getFinal_review(),
+                    analysis.getFinal_story()
+            );
+
+            movieRepository.save(movie);
+
+            MovieUrl movieUrl = MovieUrl.builder()
+                    .movie(movie)
+                    .movieUrl(fileUrl)
+                    .build();
+
+            movieUrlRepository.save(movieUrl);
+
+        } catch (Exception e) {
+            // 실패 시 상태 업데이트 등
+            movie.updateStatus("FAILED_ANALYSIS");
+            movieRepository.save(movie);
+            log.error("AI 분석 실패", e);
+        }
     }
 }
