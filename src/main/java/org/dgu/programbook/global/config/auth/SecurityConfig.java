@@ -1,7 +1,6 @@
 package org.dgu.programbook.global.config.auth;
 
 import lombok.RequiredArgsConstructor;
-import org.dgu.programbook.global.config.CorsConfig;
 import org.dgu.programbook.global.config.auth.jwt.JwtAuthenticationEntryPoint;
 import org.dgu.programbook.global.config.auth.jwt.JwtAuthenticationFilter;
 import org.dgu.programbook.global.config.auth.jwt.JwtProvider;
@@ -20,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final CorsConfig corsConfig;
+    //private final CorsConfig corsConfig;
     private final JwtProvider jwtProvider;
 
     // 토큰 없이 접근 가능한 URL
@@ -47,7 +46,7 @@ public class SecurityConfig {
                         exceptionHandlingConfigurer.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry.anyRequest().authenticated())
-                .addFilter(corsConfig.corsFilter())
+                //.addFilter(corsConfig.corsFilter())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class)
                 .build();

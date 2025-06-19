@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import org.dgu.programbook.domain.user.entity.User;
 import org.dgu.programbook.global.common.BaseTimeEntity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
 @Table(name = "movie")
@@ -19,9 +22,20 @@ public class Movie extends BaseTimeEntity {
 
     private String title;
 
+    private String director;
+
+    private String actor;
+
+    private String genre;
+
+    private LocalDate releaseDate;
+
     private String thumbnailUrl;
 
     private String summary;
+
+    @Embedded
+    private Status status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -29,11 +43,16 @@ public class Movie extends BaseTimeEntity {
 
 
     @Builder(builderMethodName = "movieBuilder")
-    public Movie(Long id, String title, String thumbnailUrl, String summary, User user) {
+    public Movie(Long id, String title, String director, String actor, String genre, LocalDate releaseDate, String thumbnailUrl, String summary, Status status, User user) {
         this.id = id;
         this.title = title;
+        this.director = director;
+        this.actor = actor;
+        this.genre = genre;
+        this.releaseDate = releaseDate;
         this.thumbnailUrl = thumbnailUrl;
         this.summary = summary;
+        this.status = status;
         this.user = user;
     }
 }

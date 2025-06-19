@@ -10,25 +10,25 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.Arrays;
 import java.util.List;
 
-@Configuration
-public class CorsConfig implements WebMvcConfigurer {
-
-    @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-
-        // CORS 허용할 URL
-        List<String> allowedOrigins = Arrays.asList(
-                "http://localhost:3000"
-        );
-
-        config.setAllowedOrigins(allowedOrigins);
-
-        config.addAllowedHeader("*");
-        config.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
-    }
-}
+//@Configuration
+//public class CorsConfig implements WebMvcConfigurer {
+//
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.setAllowCredentials(true);
+//
+//        // CORS 허용할 URL
+//        List<String> allowedOrigins = Arrays.asList(
+//                "http://localhost:3000"
+//        );
+//
+//        config.setAllowedOrigins(allowedOrigins);
+//
+//        config.addAllowedHeader("*");
+//        config.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
+//        source.registerCorsConfiguration("/**", config);
+//        return new CorsFilter(source);
+//    }
+//}
