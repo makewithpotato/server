@@ -6,9 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ReadMovieDetailResponse {
-
-    String title;
     String thumbnailUrl;
-    String videoUrls;
     String summary;
+    String review;
 }
