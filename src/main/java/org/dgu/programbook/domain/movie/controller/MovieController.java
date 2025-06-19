@@ -36,7 +36,7 @@ public class MovieController {
     // 멀티 파트 URL 만들기
     @PostMapping("/url")
     public ResponseEntity<SuccessResponse<?>> uploadMovie(
-            @ModelAttribute CreateMovieRequest createMovieRequest,
+            @RequestBody CreateMovieRequest createMovieRequest,
             @AuthenticationPrincipal Long userId) {
         return SuccessResponse.ok(movieService.createUrl(createMovieRequest, userId));
     }
