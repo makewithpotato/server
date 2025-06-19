@@ -131,13 +131,13 @@ public class MovieService {
         );
 
         // 2) AI 서버에 분석 요청
-        AnalysisResponse analysis = restClientUtil.requestAnalysis(List.of(fileUrl), completeUploadRequestDto.movieId());
+        AnalysisResponse analysis = restClientUtil.requestAnalysis(List.of(fileUrl), movie);
 
         // 3) Movie 엔티티 생성 및 저장
         movie.updateAnalysisResult(
-                analysis.getThumbnailUrl(),
-                analysis.getSummary(),
-                analysis.getReview(),
+                analysis.getThumbnail_folder_uri(),
+                analysis.getFinal_review(),
+                analysis.getFinal_story(),
                 "PENDING"
         );
 
