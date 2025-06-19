@@ -201,7 +201,6 @@ public class S3Util {
                 .build();
 
         s3Client.completeMultipartUpload(request);
-        return "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + key;
+        return "s3://" + bucketName + "/" + key;
     }
-
 }

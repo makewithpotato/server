@@ -7,6 +7,7 @@ import org.dgu.programbook.domain.movie.dto.request.CreateMovieRequest;
 import org.dgu.programbook.domain.movie.dto.response.*;
 import org.dgu.programbook.domain.movie.entity.Movie;
 import org.dgu.programbook.domain.movie.entity.MovieUrl;
+import org.dgu.programbook.domain.movie.entity.Status;
 import org.dgu.programbook.domain.movie.repository.MovieRepository;
 import org.dgu.programbook.domain.movie.repository.MovieUrlRepository;
 import org.dgu.programbook.domain.movie.util.RestClientUtil;
@@ -41,7 +42,12 @@ public class MovieService {
                 .map(movie -> new ReadMovieListResponse(
                         movie.getId(),
                         movie.getTitle(),
-                        movie.getThumbnailUrl()
+                        movie.getThumbnailUrl(),
+                        movie.getStatus(),
+                        movie.getDirector(),
+                        movie.getActor(),
+                        movie.getGenre(),
+                        movie.getReleaseDate()
                 ))
                 .collect(Collectors.toList());
     }
@@ -77,9 +83,19 @@ public class MovieService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-        // 1. 멀티 파트 URL 생성
-        // 2. 프론트 서버에 전달
+        // 1. 영화 정보 저장
+        Movie movie = Movie.movieBuilder()
+                .user(user)
+                .title(createMovieRequest.title())
+                .releaseDate(createMovieRequest.releaseDate())
+                .actor(createMovieRequest.actor())
+                .director(createMovieRequest.director())
+                .genre(createMovieRequest.genre())
+                .status(Status.UPLOADING)
+                .build();
+        movieRepository.save(movie);
 
+        // 2. 멀티 파트 URL 생성
         return s3Util.initiateMultipartUpload(createMovieRequest.totalParts());
     }
 
