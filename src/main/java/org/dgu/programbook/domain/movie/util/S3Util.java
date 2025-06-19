@@ -147,7 +147,7 @@ public class S3Util {
         String timeStamp = LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("MMdd_HHmm"));
 
-        String objectKey = dir + "/" + timeStamp + "_" + UUID.randomUUID() + "/";
+        String objectKey = dir + "/" + timeStamp + "/" +  UUID.randomUUID()+ ".mp4";
 
         // 멀티파트 업로드 시작 요청
         CreateMultipartUploadRequest createRequest = CreateMultipartUploadRequest.builder()
