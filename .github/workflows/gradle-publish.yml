@@ -121,6 +121,8 @@ jobs:
             sudo docker run -d \
               --name \${REMOTE_CONTAINER_NAME} \
               -p 8080:8080 \
+              -v /etc/localtime:/etc/localtime:ro \
+              -v /etc/timezone:/etc/timezone:ro \
               --restart unless-stopped \
               \${REMOTE_IMAGE}
       
