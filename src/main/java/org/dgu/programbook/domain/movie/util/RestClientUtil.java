@@ -33,7 +33,7 @@ public class RestClientUtil {
         );
 
         ResponseEntity<AnalysisResponse> responseEntity = restClient.post()
-                .uri("/analyze")
+                .uri("")
                 .body(body)
                 .retrieve()
                 .toEntity(AnalysisResponse.class);
