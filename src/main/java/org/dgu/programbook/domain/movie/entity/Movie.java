@@ -35,22 +35,32 @@ public class Movie extends BaseTimeEntity {
 
     private String status;
 
+    private String review;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
 
     @Builder(builderMethodName = "movieBuilder")
-    public Movie(Long id, String title, String director, String actor, String genre, LocalDate releaseDate, String thumbnailUrl, String summary, String status, User user) {
-        this.id = id;
-        this.title = title;
-        this.director = director;
-        this.actor = actor;
-        this.genre = genre;
-        this.releaseDate = releaseDate;
+    public Movie(User user, String review, String status, String summary, String thumbnailUrl, LocalDate releaseDate, String genre, String actor, String director, String title, Long id) {
+        this.user = user;
+        this.review = review;
+        this.status = status;
+        this.summary = summary;
         this.thumbnailUrl = thumbnailUrl;
+        this.releaseDate = releaseDate;
+        this.genre = genre;
+        this.actor = actor;
+        this.director = director;
+        this.title = title;
+        this.id = id;
+    }
+
+    public void updateAnalysisResult(String thumbnailUrl, String review ,String summary, String status) {
+        this.thumbnailUrl = thumbnailUrl;
+        this.review = review;
         this.summary = summary;
         this.status = status;
-        this.user = user;
     }
 }

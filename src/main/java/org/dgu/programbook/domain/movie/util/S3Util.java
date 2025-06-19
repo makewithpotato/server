@@ -184,23 +184,23 @@ public class S3Util {
 
 
     public String completeMultipartUpload(String uploadId, String key, List<PartEtagDto> parts) {
-        CompletedMultipartUpload completedUpload = CompletedMultipartUpload.builder()
-                .parts(parts.stream()
-                        .map(p -> CompletedPart.builder()
-                                .partNumber(p.partNumber())
-                                .eTag(p.etag())
-                                .build())
-                        .toList())
-                .build();
+//        CompletedMultipartUpload completedUpload = CompletedMultipartUpload.builder()
+//                .parts(parts.stream()
+//                        .map(p -> CompletedPart.builder()
+//                                .partNumber(p.partNumber())
+//                                .eTag(p.etag())
+//                                .build())
+//                        .toList())
+//                .build();
 
-        CompleteMultipartUploadRequest request = CompleteMultipartUploadRequest.builder()
-                .bucket(bucketName)
-                .key(key)
-                .uploadId(uploadId)
-                .multipartUpload(completedUpload)
-                .build();
+//        CompleteMultipartUploadRequest request = CompleteMultipartUploadRequest.builder()
+//                .bucket(bucketName)
+//                .key(key)
+//                .uploadId(uploadId)
+//                .multipartUpload(completedUpload)
+//                .build();
 
-        s3Client.completeMultipartUpload(request);
+     //   s3Client.completeMultipartUpload(request);
         return "s3://" + bucketName + "/" + key;
     }
 }

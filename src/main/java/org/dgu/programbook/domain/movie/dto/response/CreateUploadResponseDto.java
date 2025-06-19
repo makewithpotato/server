@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class CreateUploadResponseDto {
+    private Long movieId;
     private String uploadId;
     private String objectKey;
     private List<PresignedPart> presignedParts;

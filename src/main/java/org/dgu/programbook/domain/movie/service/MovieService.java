@@ -15,6 +15,7 @@ import org.dgu.programbook.domain.user.entity.User;
 import org.dgu.programbook.domain.user.repository.UserRepository;
 import org.dgu.programbook.global.error.ErrorCode;
 import org.dgu.programbook.global.error.exception.BusinessException;
+import org.hibernate.action.internal.EntityActionVetoException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -90,12 +91,21 @@ public class MovieService {
                 .actor(createMovieRequest.actor())
                 .director(createMovieRequest.director())
                 .genre(createMovieRequest.genre())
-                .status("PENDING")
+                .status("UPLOADING")
                 .build();
+
         movieRepository.save(movie);
 
-        // 2. 멀티 파트 URL 생성
-        return s3Util.initiateMultipartUpload(createMovieRequest.totalParts());
+        // 2. 멀티파트 URL 생성
+        CreateUploadResponseDto s3Info = s3Util.initiateMultipartUpload(createMovieRequest.totalParts());
+
+        // 3. DTO로 묶어서 반환
+        return CreateUploadResponseDto.builder()
+                .movieId(movie.getId())
+                .uploadId(s3Info.getUploadId())
+                .objectKey(s3Info.getObjectKey())
+                .presignedParts(s3Info.getPresignedParts())
+                .build();
     }
 
     // 프론트에서 완료 요청 -> S3에서 영상 URL 전달받아 저장 및 프론트 전달
@@ -106,6 +116,9 @@ public class MovieService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
+        Movie movie = movieRepository.findById(completeUploadRequestDto.movieId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.MOVIE_NOT_FOUND));
+
         // 1) S3 멀티파트 업로드 완료
         String fileUrl = s3Util.completeMultipartUpload(
                 completeUploadRequestDto.uploadId(),
@@ -113,16 +126,17 @@ public class MovieService {
                 completeUploadRequestDto.presignedParts()
         );
 
+
         // 2) AI 서버에 분석 요청
-        AnalysisResponse analysis = restClientUtil.requestAnalysis(List.of(fileUrl));
+        AnalysisResponse analysis = restClientUtil.requestAnalysis(List.of(fileUrl), completeUploadRequestDto.movieId());
 
         // 3) Movie 엔티티 생성 및 저장
-        Movie movie = Movie.movieBuilder()
-                .user(user)
-                .title(completeUploadRequestDto.title())
-                .thumbnailUrl(analysis.getThumbnailUrl())
-                .summary(analysis.getSummary())
-                .build();
+        movie.updateAnalysisResult(
+                analysis.getThumbnailUrl(),
+                analysis.getSummary(),
+                analysis.getReview(),
+                "PENDING"
+        );
 
         movieRepository.save(movie);
 

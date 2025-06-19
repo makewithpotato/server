@@ -26,8 +26,11 @@ public class RestClientUtil {
                 .build();
     }
 
-    public AnalysisResponse requestAnalysis(List<String> videoPartUrls) {
-        Map<String, Object> body = Map.of("videoUrls", videoPartUrls);
+    public AnalysisResponse requestAnalysis(List<String> videoPartUrls, Long movieId) {
+        Map<String, Object> body = Map.of(
+                "videoUrls", videoPartUrls,
+                "movieId", movieId
+        );
 
         ResponseEntity<AnalysisResponse> responseEntity = restClient.post()
                 .uri("/analyze")
