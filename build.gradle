@@ -49,6 +49,7 @@ dependencies {
 
     //aws
     implementation platform('software.amazon.awssdk:bom:2.25.6')
+    implementation "software.amazon.awssdk:apache-client:2.25.6"
 
     implementation 'software.amazon.awssdk:transcribe'
     implementation 'software.amazon.awssdk:s3'
