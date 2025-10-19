@@ -7,6 +7,8 @@ import org.dgu.programbook.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Service
@@ -22,8 +24,10 @@ public class OauthService {
     @Transactional
     public UserTokenResponseDTO socialLogin(String code){
 
+        String decodedCode = URLDecoder.decode(code, StandardCharsets.UTF_8); //구글 로그인 인가코드 인코딩 관련 오류 방지 (%2F -> /)
+
         // OAuth 토큰 가져오기
-        String oauthToken = oauthTokenProvider.getOauthToken(code);
+        String oauthToken = oauthTokenProvider.getOauthToken(decodedCode);
 
         // 사용자 정보 가져오기
         JsonNode userResource = oauthUserResourceProvider.getUserResource(oauthToken);
