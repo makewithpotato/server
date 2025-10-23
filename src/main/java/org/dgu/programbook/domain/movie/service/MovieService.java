@@ -89,7 +89,7 @@ public class MovieService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-        log.error("createMovieRequest: " + createMovieRequest);
+        log.info("createMovieRequest: " + createMovieRequest);
 
         // 1. 영화 정보 저장
         Movie movie = Movie.movieBuilder()
@@ -103,9 +103,12 @@ public class MovieService {
                 .build();
 
         movieRepository.save(movie);
+        log.info("[MovieService] Movie 저장 완료 - movieId: {}", movie.getId());
 
         // 2. 멀티파트 URL 생성
         CreateUploadResponseDto s3Info = s3Util.initiateMultipartUpload(createMovieRequest.totalParts());
+        log.info("[MovieService] S3 Presigned URL 생성 완료 - uploadId: {}, objectKey: {}",
+                s3Info.getUploadId(), s3Info.getObjectKey());
 
         // 3. DTO로 묶어서 반환
         return CreateUploadResponseDto.builder()

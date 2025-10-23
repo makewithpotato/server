@@ -148,6 +148,7 @@ public class S3Util {
                 .format(DateTimeFormatter.ofPattern("MMdd_HHmm"));
 
         String objectKey = dir + "/" + timeStamp + "/" +  UUID.randomUUID()+ ".mp4";
+        log.info("[S3Util] objectKey 생성 완료 - {}", objectKey);
 
         // 멀티파트 업로드 시작 요청
         CreateMultipartUploadRequest createRequest = CreateMultipartUploadRequest.builder()
@@ -155,6 +156,8 @@ public class S3Util {
                 .key(objectKey)
                 .build();
         CreateMultipartUploadResponse response = s3Client.createMultipartUpload(createRequest);
+
+        log.info("[S3Util] Multipart Upload 시작 완료 - uploadId: {}", response.uploadId());
 
         String uploadId = response.uploadId();
         List<PresignedPart> presignedParts = new ArrayList<>();
@@ -172,13 +175,19 @@ public class S3Util {
                     b -> b.signatureDuration(Duration.ofMinutes(10)).uploadPartRequest(uploadPartRequest)
             );
 
+
             presignedParts.add(
                     PresignedPart.builder()
                             .partNumber(partNumber)
                             .presignedUrl(presigned.url().toString())
                             .build()
             );
+
+            log.debug("[S3Util] Presigned URL 생성 - partNumber: {}, url: {}",
+                    partNumber, presigned.url().toString());
         }
+
+        log.info("[S3Util] Presigned URL 전체 생성 완료 - totalParts: {}", totalParts);
 
         return CreateUploadResponseDto.builder()
                 .uploadId(uploadId)
