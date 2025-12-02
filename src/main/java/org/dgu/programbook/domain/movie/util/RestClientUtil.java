@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 @Component
@@ -30,13 +31,14 @@ public class RestClientUtil {
     public AnalysisResponse requestAnalysis(String videoPartUrls, Movie movie) {
         Map<String, Object> body = Map.of(
                 "s3_video_uri", videoPartUrls,
+                "characters_info", movie.getActor(),
                 "movie_id", movie.getId(),
                 "segment_duration", 600,
-                "characters_info", movie.getActor(),
+                "init", false,
                 "language_code", "ko-KR",
                 "threshold", 30,
-                "init", true
-
+                "custom_prompts", Arrays.asList(movie.getCustom_prompts()),
+                "custom_retrievals", Arrays.asList(movie.getCustom_retrievals())
         );
 
         ResponseEntity<AnalysisResponse> responseEntity = restClient.post()

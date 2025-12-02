@@ -96,10 +96,6 @@ public class MovieService {
 
         log.info("createMovieRequest: " + createMovieRequest);
 
-        //리스트 묶어서 처리
-        String prompts = "{" + createMovieRequest.custom_prompts().stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(",")) + "}";
-        String retrievals = "{" + createMovieRequest.custom_retrievals().stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(",")) + "}";
-
         // 1. 영화 정보 저장
         Movie movie = Movie.movieBuilder()
                 .user(user)
@@ -109,8 +105,8 @@ public class MovieService {
                 .director(createMovieRequest.director())
                 .genre(createMovieRequest.genre())
                 .status("UPLOADING")
-                .custom_prompts(prompts)
-                .custom_retrievals(retrievals)
+                .custom_prompts(createMovieRequest.custom_prompts().toArray(new String[0]))
+                .custom_retrievals(createMovieRequest.custom_retrievals().toArray(new String[0]))
                 .build();
 
         movieRepository.save(movie);

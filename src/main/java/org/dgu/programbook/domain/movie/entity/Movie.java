@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.dgu.programbook.domain.user.entity.User;
 import org.dgu.programbook.global.common.BaseTimeEntity;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 
@@ -39,11 +41,13 @@ public class Movie extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String review;
 
-    @Column(columnDefinition = "TEXT")
-    private String custom_prompts;
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(columnDefinition = "text[]")
+    private String[] custom_prompts;
 
-    @Column(columnDefinition = "TEXT")
-    private String custom_retrievals;
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(columnDefinition = "text[]")
+    private String[] custom_retrievals;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -53,7 +57,7 @@ public class Movie extends BaseTimeEntity {
     @Builder(builderMethodName = "movieBuilder")
     public Movie(User user, String review, String status, String summary, String thumbnailUrl,
                  LocalDate releaseDate, String genre, String actor, String director, String title,
-                 Long id, String custom_prompts, String custom_retrievals) {
+                 Long id, String[] custom_prompts, String[] custom_retrievals) {
         this.user = user;
         this.review = review;
         this.status = status;
