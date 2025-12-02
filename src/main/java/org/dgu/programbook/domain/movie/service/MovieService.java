@@ -76,9 +76,14 @@ public class MovieService {
 
         // 4. DTO로 변환 및 반환
         return ReadMovieDetailResponse.builder()
+                .title(movie.getTitle())
+                .director(movie.getDirector())
+                .actor(movie.getActor())
+                .genre(movie.getGenre())
+                .releaseDate(movie.getReleaseDate())
                 .thumbnailUrl(movie.getThumbnailUrl())
                 .summary(movie.getSummary())
-                .review(movie.getReview())
+                .reviews(movie.getReview())
                 .build();
     }
 
@@ -100,6 +105,8 @@ public class MovieService {
                 .director(createMovieRequest.director())
                 .genre(createMovieRequest.genre())
                 .status("UPLOADING")
+                .customPrompts(createMovieRequest.customPrompts().toArray(new String[0]))
+                .customRetrievals(createMovieRequest.customRetrievals().toArray(new String[0]))
                 .build();
 
         movieRepository.save(movie);

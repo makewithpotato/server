@@ -26,8 +26,7 @@ public class AnalysisAsyncService {
             // 분석 결과 저장
             movie.updateAnalysisResult(
                     analysis.getThumbnail_folder_uri(),
-                    analysis.getFinal_review(),
-                    analysis.getFinal_story()
+                    analysis.getPrompt2results().toArray(new String[0])
             );
 
             movieRepository.save(movie);
