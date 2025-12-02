@@ -1,12 +1,11 @@
 name: Java CI with Gradle & Docker Deploy
 
 on:
-  pull_request: 
-    types:
-      - closed
-    branches:
-      - develop
-  #테스트 돌리는용
+  #pull_request: 
+    #types:
+     #- closed
+    #branches:
+      #- develop
   push:
     branches: [ "develop" ]
       
@@ -68,7 +67,7 @@ jobs:
       - name: Generate Dockerfile
         run: |
           tee Dockerfile << EOF
-          FROM openjdk:17-jdk
+          FROM eclipse-temurin:17-jdk
           COPY ${{ env.JAR_FILE }} /app.jar
           COPY src/main/resources/application.yml application.yml
           ENV SPRING_CONFIG_LOCATION=application.yml
