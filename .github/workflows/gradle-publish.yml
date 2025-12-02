@@ -7,8 +7,8 @@ on:
     branches:
       - develop
   #테스트 돌리는용
-  #push:
-    #branches: [ "develop" ]
+  push:
+    branches: [ "develop" ]
       
 jobs:
   build-and-deploy:
