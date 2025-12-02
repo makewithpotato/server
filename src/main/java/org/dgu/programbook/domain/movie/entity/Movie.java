@@ -39,13 +39,21 @@ public class Movie extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String review;
 
+    @Column(columnDefinition = "TEXT")
+    private String custom_prompts;
+
+    @Column(columnDefinition = "TEXT")
+    private String custom_retrievals;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
 
     @Builder(builderMethodName = "movieBuilder")
-    public Movie(User user, String review, String status, String summary, String thumbnailUrl, LocalDate releaseDate, String genre, String actor, String director, String title, Long id) {
+    public Movie(User user, String review, String status, String summary, String thumbnailUrl,
+                 LocalDate releaseDate, String genre, String actor, String director, String title,
+                 Long id, String custom_prompts, String custom_retrievals) {
         this.user = user;
         this.review = review;
         this.status = status;
@@ -57,6 +65,8 @@ public class Movie extends BaseTimeEntity {
         this.director = director;
         this.title = title;
         this.id = id;
+        this.custom_prompts=custom_prompts;
+        this.custom_retrievals=custom_retrievals;
     }
 
     public void updateAnalysisResult(String thumbnailUrl, String review ,String summary) {

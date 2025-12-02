@@ -1,7 +1,7 @@
 package org.dgu.programbook.domain.movie.dto.request;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
 public record CreateMovieRequest(
         String title,
@@ -9,6 +9,8 @@ public record CreateMovieRequest(
         String genre,
         LocalDate releaseDate,
         String actor,
-        Long totalParts
+        Long totalParts,
+        List<String> custom_prompts,
+        List<String> custom_retrievals
 ) {
 }
