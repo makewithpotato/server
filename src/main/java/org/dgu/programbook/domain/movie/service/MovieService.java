@@ -76,9 +76,14 @@ public class MovieService {
 
         // 4. DTO로 변환 및 반환
         return ReadMovieDetailResponse.builder()
+                .title(movie.getTitle())
+                .director(movie.getDirector())
+                .actor(movie.getActor())
+                .genre(movie.getGenre())
+                .releaseDate(movie.getReleaseDate())
                 .thumbnailUrl(movie.getThumbnailUrl())
                 .summary(movie.getSummary())
-                .review(movie.getReview())
+                .reviews(movie.getReview())
                 .build();
     }
 
