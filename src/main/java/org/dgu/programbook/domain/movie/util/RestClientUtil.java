@@ -37,8 +37,8 @@ public class RestClientUtil {
                 "init", false,
                 "language_code", "ko-KR",
                 "threshold", 30,
-                "custom_prompts", Arrays.asList(movie.getCustom_prompts()),
-                "custom_retrievals", Arrays.asList(movie.getCustom_retrievals())
+                "custom_prompts", Arrays.asList(movie.getCustomPrompts()),
+                "custom_retrievals", Arrays.asList(movie.getCustomRetrievals())
         );
 
         ResponseEntity<AnalysisResponse> responseEntity = restClient.post()

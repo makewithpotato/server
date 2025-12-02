@@ -105,8 +105,8 @@ public class MovieService {
                 .director(createMovieRequest.director())
                 .genre(createMovieRequest.genre())
                 .status("UPLOADING")
-                .custom_prompts(createMovieRequest.custom_prompts().toArray(new String[0]))
-                .custom_retrievals(createMovieRequest.custom_retrievals().toArray(new String[0]))
+                .customPrompts(createMovieRequest.customPrompts().toArray(new String[0]))
+                .customRetrievals(createMovieRequest.customRetrievals().toArray(new String[0]))
                 .build();
 
         movieRepository.save(movie);

@@ -43,11 +43,15 @@ public class Movie extends BaseTimeEntity {
 
     @JdbcTypeCode(SqlTypes.ARRAY)
     @Column(columnDefinition = "text[]")
-    private String[] custom_prompts;
+    private String[] customPrompts;
 
     @JdbcTypeCode(SqlTypes.ARRAY)
     @Column(columnDefinition = "text[]")
-    private String[] custom_retrievals;
+    private String[] customRetrievals;
+
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(columnDefinition = "text[]")
+    private String[] customResults;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -57,7 +61,7 @@ public class Movie extends BaseTimeEntity {
     @Builder(builderMethodName = "movieBuilder")
     public Movie(User user, String review, String status, String summary, String thumbnailUrl,
                  LocalDate releaseDate, String genre, String actor, String director, String title,
-                 Long id, String[] custom_prompts, String[] custom_retrievals) {
+                 Long id, String[] customPrompts, String[] customRetrievals) {
         this.user = user;
         this.review = review;
         this.status = status;
@@ -69,14 +73,13 @@ public class Movie extends BaseTimeEntity {
         this.director = director;
         this.title = title;
         this.id = id;
-        this.custom_prompts=custom_prompts;
-        this.custom_retrievals=custom_retrievals;
+        this.customPrompts=customPrompts;
+        this.customRetrievals=customRetrievals;
     }
 
-    public void updateAnalysisResult(String thumbnailUrl, String review ,String summary) {
+    public void updateAnalysisResult(String thumbnailUrl, String[] customResults) {
         this.thumbnailUrl = thumbnailUrl;
-        this.review = review;
-        this.summary = summary;
+        this.customResults=customResults;
     }
 
     public void updateStatus(String status) {

@@ -10,7 +10,7 @@ public record CreateMovieRequest(
         LocalDate releaseDate,
         String actor,
         Long totalParts,
-        List<String> custom_prompts,
-        List<String> custom_retrievals
+        List<String> customPrompts,
+        List<String> customRetrievals
 ) {
 }
