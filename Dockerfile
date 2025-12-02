@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk
+FROM eclipse-temurin:17-jdk
 
 # Jar 파일의 위치
 ARG JAR_FILE=build/libs/*.jar
