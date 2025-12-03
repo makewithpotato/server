@@ -1,6 +1,7 @@
 package org.dgu.programbook.domain.movie.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dgu.programbook.domain.movie.dto.response.AnalysisResponse;
 import org.dgu.programbook.domain.movie.entity.Movie;
 import org.dgu.programbook.domain.movie.entity.MovieUrl;
@@ -10,6 +11,7 @@ import org.dgu.programbook.domain.movie.util.RestClientUtil;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AnalysisAsyncService {
@@ -22,6 +24,12 @@ public class AnalysisAsyncService {
         try {
             // AI 서버 분석 요청
             AnalysisResponse analysis = restClientUtil.requestAnalysis(fileUrl, movie);
+
+            log.info("AnalysisResponse = prompt2results={}, retrieval2uris={}, thumbnailFolder={}",
+                    analysis.getPrompt2results(),
+                    analysis.getRetrieval2uris(),
+                    analysis.getThumbnail_folder_uri());
+
 
             // 분석 결과 저장
             movie.updateAnalysisResult(
