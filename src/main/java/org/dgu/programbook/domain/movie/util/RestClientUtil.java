@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.dgu.programbook.domain.movie.dto.response.AnalysisResponse;
 import org.dgu.programbook.domain.movie.entity.Movie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,8 +26,13 @@ public class RestClientUtil {
 
     @PostConstruct
     public void init() {
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        factory.setConnectTimeout(10_000);  // 10초
+        factory.setReadTimeout(3600_000);  // 1시간
+
         this.restClient = RestClient.builder()
                 .baseUrl(aiUrl)
+                .requestFactory(factory)
                 .build();
     }
 
@@ -47,16 +53,22 @@ public class RestClientUtil {
 
         log.info("AI Request Body = {}", body);
 
-        ResponseEntity<AnalysisResponse> responseEntity = restClient.post()
-                .uri("")
-                .body(body)
-                .retrieve()
-                .toEntity(AnalysisResponse.class);
+        try {
+            ResponseEntity<AnalysisResponse> responseEntity = restClient.post()
+                    .uri("")
+                    .body(body)
+                    .retrieve()
+                    .toEntity(AnalysisResponse.class);
 
-        log.info("AI Response Body = {}", responseEntity.getBody());
-        log.info("AI 분석 요청 끝");
+            log.info("AI Response Body = {}", responseEntity.getBody());
+            log.info("AI 분석 요청 끝");
 
-        return responseEntity.getBody();
+            return responseEntity.getBody();
+
+        } catch (Exception e) {
+            log.error("AI 분석 요청 실패 (RestClient 예외 발생)", e);
+            throw e;
+        }
     }
 
 }
