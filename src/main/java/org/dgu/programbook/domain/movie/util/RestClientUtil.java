@@ -54,6 +54,7 @@ public class RestClientUtil {
                 .toEntity(AnalysisResponse.class);
 
         log.info("AI Response Body = {}", responseEntity.getBody());
+        log.info("AI 분석 요청 끝");
 
         return responseEntity.getBody();
     }
