@@ -10,6 +10,8 @@ import org.dgu.programbook.domain.movie.repository.MovieUrlRepository;
 import org.dgu.programbook.domain.movie.util.RestClientUtil;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import java.util.List;
+
 
 @Slf4j
 @Service
@@ -30,12 +32,20 @@ public class AnalysisAsyncService {
                     analysis.getRetrieval2uris(),
                     analysis.getThumbnail_folder_uri());
 
+            String[] promptArray = analysis.getPrompt2results().stream()
+                    .filter(item -> item.size() > 1)
+                    .map(item -> item.get(1))
+                    .toArray(String[]::new);
+
+            String[] uriArray = analysis.getRetrieval2uris().values().stream()
+                    .flatMap(List::stream)
+                    .toArray(String[]::new);
 
             // 분석 결과 저장
             movie.updateAnalysisResult(
                     analysis.getThumbnail_folder_uri(),
-                    analysis.getPrompt2results().toArray(new String[0]),
-                    analysis.getRetrieval2uris().toArray(new String[0])
+                    promptArray,
+                    uriArray
             );
 
             movieRepository.save(movie);
