@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dgu.programbook.domain.movie.dto.request.CompleteUploadRequestDto;
 import org.dgu.programbook.domain.movie.dto.request.CreateMovieRequest;
-import org.dgu.programbook.domain.movie.dto.response.*;
+import org.dgu.programbook.domain.movie.dto.response.CreateUploadResponseDto;
+import org.dgu.programbook.domain.movie.dto.response.PromptResult;
+import org.dgu.programbook.domain.movie.dto.response.ReadMovieDetailResponse;
+import org.dgu.programbook.domain.movie.dto.response.ReadMovieListResponse;
 import org.dgu.programbook.domain.movie.entity.Movie;
-import org.dgu.programbook.domain.movie.entity.MovieUrl;
 import org.dgu.programbook.domain.movie.repository.MovieRepository;
 import org.dgu.programbook.domain.movie.repository.MovieUrlRepository;
 import org.dgu.programbook.domain.movie.util.RestClientUtil;
@@ -16,12 +18,11 @@ import org.dgu.programbook.domain.user.entity.User;
 import org.dgu.programbook.domain.user.repository.UserRepository;
 import org.dgu.programbook.global.error.ErrorCode;
 import org.dgu.programbook.global.error.exception.BusinessException;
-import org.hibernate.action.internal.EntityActionVetoException;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,6 +75,24 @@ public class MovieService {
             throw new BusinessException(ErrorCode.FORBIDDEN); // 사용자에게 권한 없음
         }
 
+        // 프롬프트 + 답변 쌍 묶기
+        String[] prompts = movie.getCustomPrompts();
+        String[] results = movie.getCustomResults();
+
+        List<PromptResult> promptPairs = new ArrayList<>();
+
+        if (prompts != null && results != null) {
+            int len = Math.min(prompts.length, results.length);
+            for (int i = 0; i < len; i++) {
+                promptPairs.add(
+                        PromptResult.builder()
+                                .prompt(prompts[i])
+                                .result(results[i])
+                                .build()
+                );
+            }
+        }
+
         // 4. DTO로 변환 및 반환
         return ReadMovieDetailResponse.builder()
                 .title(movie.getTitle())
@@ -82,8 +101,7 @@ public class MovieService {
                 .genre(movie.getGenre())
                 .releaseDate(movie.getReleaseDate())
                 .thumbnailUrl(movie.getThumbnailUrl())
-                .summary(movie.getSummary())
-                .reviews(movie.getReview())
+                .promptResults(promptPairs)
                 .build();
     }
 
