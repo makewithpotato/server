@@ -17,4 +17,6 @@ public class ReadMovieDetailResponse {
     String thumbnailUrl;
 
     List<PromptResult> promptResults;
+    List<RetrievalResult> retrievalResults;
+
 }

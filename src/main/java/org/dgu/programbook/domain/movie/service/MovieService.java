@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dgu.programbook.domain.movie.dto.request.CompleteUploadRequestDto;
 import org.dgu.programbook.domain.movie.dto.request.CreateMovieRequest;
-import org.dgu.programbook.domain.movie.dto.response.CreateUploadResponseDto;
-import org.dgu.programbook.domain.movie.dto.response.PromptResult;
-import org.dgu.programbook.domain.movie.dto.response.ReadMovieDetailResponse;
-import org.dgu.programbook.domain.movie.dto.response.ReadMovieListResponse;
+import org.dgu.programbook.domain.movie.dto.response.*;
 import org.dgu.programbook.domain.movie.entity.Movie;
 import org.dgu.programbook.domain.movie.repository.MovieRepository;
 import org.dgu.programbook.domain.movie.repository.MovieUrlRepository;
@@ -22,9 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Slf4j
 @Service
@@ -75,23 +72,16 @@ public class MovieService {
             throw new BusinessException(ErrorCode.FORBIDDEN); // 사용자에게 권한 없음
         }
 
-        // 프롬프트 + 답변 쌍 묶기
-        String[] prompts = movie.getCustomPrompts();
-        String[] results = movie.getCustomResults();
+        // (프롬프트 + 답변) (장면 +uri) 쌍 매핑
+        List<PromptResult> promptPairs = mapPromptResults(
+                movie.getCustomPrompts(),
+                movie.getCustomResults()
+        );
 
-        List<PromptResult> promptPairs = new ArrayList<>();
-
-        if (prompts != null && results != null) {
-            int len = Math.min(prompts.length, results.length);
-            for (int i = 0; i < len; i++) {
-                promptPairs.add(
-                        PromptResult.builder()
-                                .prompt(prompts[i])
-                                .result(results[i])
-                                .build()
-                );
-            }
-        }
+        List<RetrievalResult> retrievalResults = mapRetrievalResults(
+                movie.getCustomRetrievals(),
+                movie.getRetrievalUris()
+        );
 
         // 4. DTO로 변환 및 반환
         return ReadMovieDetailResponse.builder()
@@ -102,8 +92,45 @@ public class MovieService {
                 .releaseDate(movie.getReleaseDate())
                 .thumbnailUrl(movie.getThumbnailUrl())
                 .promptResults(promptPairs)
+                .retrievalResults(retrievalResults)
                 .build();
     }
+
+    //프롬프트-결과 쌍 매핑
+    private List<PromptResult> mapPromptResults(String[] prompts, String[] results) {
+
+        if (prompts == null || results == null) return List.of();
+
+        int len = Math.min(prompts.length, results.length);
+
+        return IntStream.range(0, len)
+                .mapToObj(i -> PromptResult.builder()
+                        .prompt(prompts[i])
+                        .result(results[i])
+                        .build()
+                )
+                .toList();
+    }
+
+    //장면-uri리스트 쌍 매핑
+    private List<RetrievalResult> mapRetrievalResults(String[] retrievals, String[] retrievalUris) {
+
+        if (retrievals == null || retrievalUris == null) return List.of();
+
+        return IntStream.range(0, retrievals.length)
+                .filter(i -> i * 3 + 2 < retrievalUris.length)
+                .mapToObj(i -> RetrievalResult.builder()
+                        .scene(retrievals[i])
+                        .uri(List.of(
+                                retrievalUris[i * 3],
+                                retrievalUris[i * 3 + 1],
+                                retrievalUris[i * 3 + 2]
+                        ))
+                        .build()
+                )
+                .toList();
+    }
+
 
     // 멀티 파트 URL 반환
     public CreateUploadResponseDto createUrl(CreateMovieRequest createMovieRequest, Long userId) {

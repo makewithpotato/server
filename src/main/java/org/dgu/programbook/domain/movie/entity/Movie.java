@@ -53,6 +53,11 @@ public class Movie extends BaseTimeEntity {
     @Column(columnDefinition = "text[]")
     private String[] customResults;
 
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(columnDefinition = "text[]")
+    private String[] retrievalUris;
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -77,9 +82,10 @@ public class Movie extends BaseTimeEntity {
         this.customRetrievals=customRetrievals;
     }
 
-    public void updateAnalysisResult(String thumbnailUrl, String[] customResults) {
+    public void updateAnalysisResult(String thumbnailUrl, String[] customResults, String[] retrievalUris) {
         this.thumbnailUrl = thumbnailUrl;
         this.customResults=customResults;
+        this.retrievalUris=retrievalUris;
     }
 
     public void updateStatus(String status) {
