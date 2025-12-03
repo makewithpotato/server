@@ -57,6 +57,7 @@ public class Movie extends BaseTimeEntity {
     @Column(columnDefinition = "text[]")
     private String[] retrievalUris;
 
+    private String embeddingUri;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
