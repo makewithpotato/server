@@ -31,6 +31,8 @@ public class RestClientUtil {
     }
 
     public AnalysisResponse requestAnalysis(String videoPartUrls, Movie movie) {
+        log.info("AI 분석 요청 시작");
+
         Map<String, Object> body = Map.of(
                 "s3_video_uri", videoPartUrls,
                 "characters_info", movie.getActor(),
@@ -42,7 +44,6 @@ public class RestClientUtil {
                 "custom_prompts", Arrays.asList(movie.getCustomPrompts()),
                 "custom_retrievals", Arrays.asList(movie.getCustomRetrievals())
         );
-
 
         log.info("AI Request Body = {}", body);
 
