@@ -53,6 +53,8 @@ public class RestClientUtil {
                 .retrieve()
                 .toEntity(AnalysisResponse.class);
 
+        log.info("AI Response Body = {}", responseEntity.getBody());
+
         return responseEntity.getBody();
     }
 
