@@ -128,5 +128,5 @@ jobs:
               \${REMOTE_IMAGE}
       
             # 4) 사용하지 않는 이미지·볼륨 정리
-            sudo docker system prune -a -f --volumes
+            sudo docker image prune -a -f
           EOF
