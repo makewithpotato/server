@@ -8,8 +8,12 @@ import org.dgu.programbook.domain.movie.entity.MovieUrl;
 import org.dgu.programbook.domain.movie.repository.MovieRepository;
 import org.dgu.programbook.domain.movie.repository.MovieUrlRepository;
 import org.dgu.programbook.domain.movie.util.RestClientUtil;
+import org.dgu.programbook.global.error.ErrorCode;
+import org.dgu.programbook.global.error.exception.BusinessException;
+import org.dgu.programbook.global.error.exception.EntityNotFoundException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 
@@ -32,6 +36,10 @@ public class AnalysisAsyncService {
                     analysis.getRetrieval2uris(),
                     analysis.getThumbnail_folder_uri());
 
+            //detached 상태인 movie에 값 저장하는거 방지
+            Movie target = movieRepository.findById(movie.getId())
+                    .orElseThrow(() -> new BusinessException(ErrorCode.MOVIE_NOT_FOUND));
+
             String[] promptArray = analysis.getPrompt2results().stream()
                     .filter(item -> item.size() > 1)
                     .map(item -> item.get(1))
@@ -42,16 +50,16 @@ public class AnalysisAsyncService {
                     .toArray(String[]::new);
 
             // 분석 결과 저장
-            movie.updateAnalysisResult(
+            target.updateAnalysisResult(
                     analysis.getThumbnail_folder_uri(),
                     promptArray,
                     uriArray
             );
 
-            movieRepository.save(movie);
+            movieRepository.save(target);
 
             MovieUrl movieUrl = MovieUrl.builder()
-                    .movie(movie)
+                    .movie(target)
                     .movieUrl(fileUrl)
                     .build();
 
