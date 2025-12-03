@@ -59,14 +59,15 @@ public class AnalysisAsyncService {
             // 분석 결과 저장
             target.updateAnalysisResult(
                     analysis.getThumbnail_folder_uri(),
-                    promptArray,
-                    uriArray
+                    Arrays.copyOf(promptArray, promptArray.length),
+                    Arrays.copyOf(uriArray, uriArray.length)
             );
 
             System.out.println(Arrays.toString(promptArray));
             System.out.println(Arrays.toString(uriArray));
 
             movieRepository.save(target);
+            movieRepository.flush();
 
             MovieUrl movieUrl = MovieUrl.builder()
                     .movie(target)
