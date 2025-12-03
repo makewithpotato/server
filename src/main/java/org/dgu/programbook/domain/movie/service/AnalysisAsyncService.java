@@ -14,6 +14,7 @@ import org.dgu.programbook.global.error.exception.EntityNotFoundException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -48,6 +49,9 @@ public class AnalysisAsyncService {
             String[] uriArray = analysis.getRetrieval2uris().values().stream()
                     .flatMap(List::stream)
                     .toArray(String[]::new);
+
+            log.info("customResults(promptArray) = {}", Arrays.toString(promptArray));
+            log.info("retrievalUris(uriArray) = {}", Arrays.toString(uriArray));
 
             // 분석 결과 저장
             target.updateAnalysisResult(
