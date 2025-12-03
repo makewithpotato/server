@@ -2,6 +2,7 @@ package org.dgu.programbook.domain.movie.util;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dgu.programbook.domain.movie.dto.response.AnalysisResponse;
 import org.dgu.programbook.domain.movie.entity.Movie;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class RestClientUtil {
@@ -40,6 +42,9 @@ public class RestClientUtil {
                 "custom_prompts", Arrays.asList(movie.getCustomPrompts()),
                 "custom_retrievals", Arrays.asList(movie.getCustomRetrievals())
         );
+
+
+        log.info("AI Request Body = {}", body);
 
         ResponseEntity<AnalysisResponse> responseEntity = restClient.post()
                 .uri("")
