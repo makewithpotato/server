@@ -13,6 +13,7 @@ import org.dgu.programbook.global.error.exception.BusinessException;
 import org.dgu.programbook.global.error.exception.EntityNotFoundException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +29,7 @@ public class AnalysisAsyncService {
 
     //TODO : 로그 정리하기
     @Async
+    @Transactional
     public void analyzeAndSave(Movie movie, String fileUrl) {
         try {
             // AI 서버 분석 요청

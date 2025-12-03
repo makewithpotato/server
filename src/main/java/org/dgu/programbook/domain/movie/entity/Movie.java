@@ -10,6 +10,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 @Getter
 @NoArgsConstructor
@@ -85,8 +86,8 @@ public class Movie extends BaseTimeEntity {
 
     public void updateAnalysisResult(String thumbnailUrl, String[] customResults, String[] retrievalUris) {
         this.thumbnailUrl = thumbnailUrl;
-        this.customResults = customResults.clone();
-        this.retrievalUris = retrievalUris.clone();
+        this.customResults = Arrays.copyOf(customResults, customResults.length);
+        this.retrievalUris = Arrays.copyOf(retrievalUris, retrievalUris.length);
     }
 
     public void updateStatus(String status) {
