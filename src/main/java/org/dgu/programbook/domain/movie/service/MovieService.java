@@ -175,12 +175,16 @@ public class MovieService {
     @Transactional
     public Boolean completeUpload(CompleteUploadRequestDto completeUploadRequestDto, Long userId) {
 
+        log.info("UPLOAD COMPLETE START userId={}, movieId={}", userId, completeUploadRequestDto.movieId());
+
         // 0. 사용자 조회
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         Movie movie = movieRepository.findById(completeUploadRequestDto.movieId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.MOVIE_NOT_FOUND));
+
+        log.info("USER & MOVIE VALIDATED userId={}, movieId={}", userId, movie.getId());
 
         // 1) S3 멀티파트 업로드 완료
         String fileUrl = s3Util.completeMultipartUpload(
@@ -191,6 +195,8 @@ public class MovieService {
 
         movie.updateStatus("PENDING");
         movieRepository.save(movie);
+
+        log.info("MOVIE STATUS UPDATED TO PENDING movieId={}", movie.getId());
 
         // 2) AI 서버에 분석 요청
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
@@ -216,7 +222,7 @@ public class MovieService {
 //                .build();
 //
 //        movieUrlRepository.save(movieUrl);
-
+        log.info("UPLOAD COMPLETE END (Transaction will commit soon) movieId={}", movie.getId());
         return true;
     }
 }
