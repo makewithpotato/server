@@ -26,6 +26,7 @@ public class AnalysisAsyncService {
     private final MovieUrlRepository movieUrlRepository;
     private final RestClientUtil restClientUtil;
 
+    //TODO : 로그 정리하기
     @Async
     public void analyzeAndSave(Movie movie, String fileUrl) {
         try {
@@ -59,6 +60,9 @@ public class AnalysisAsyncService {
                     promptArray,
                     uriArray
             );
+
+            System.out.println(Arrays.toString(promptArray));
+            System.out.println(Arrays.toString(uriArray));
 
             movieRepository.save(target);
 

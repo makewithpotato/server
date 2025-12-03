@@ -85,8 +85,8 @@ public class Movie extends BaseTimeEntity {
 
     public void updateAnalysisResult(String thumbnailUrl, String[] customResults, String[] retrievalUris) {
         this.thumbnailUrl = thumbnailUrl;
-        this.customResults=customResults;
-        this.retrievalUris=retrievalUris;
+        this.customResults = customResults.clone();
+        this.retrievalUris = retrievalUris.clone();
     }
 
     public void updateStatus(String status) {
