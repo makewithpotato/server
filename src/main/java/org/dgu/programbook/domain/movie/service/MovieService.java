@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dgu.programbook.domain.movie.dto.request.CompleteUploadRequestDto;
 import org.dgu.programbook.domain.movie.dto.request.CreateMovieRequest;
+import org.dgu.programbook.domain.movie.dto.request.UploadFailRequestDto;
 import org.dgu.programbook.domain.movie.dto.response.*;
 import org.dgu.programbook.domain.movie.entity.Movie;
 import org.dgu.programbook.domain.movie.repository.MovieRepository;
@@ -224,5 +225,16 @@ public class MovieService {
 //        movieUrlRepository.save(movieUrl);
         log.info("UPLOAD COMPLETE END (Transaction will commit soon) movieId={}", movie.getId());
         return true;
+    }
+
+    public void failUpload(UploadFailRequestDto uploadFailRequestDto, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        Movie movie = movieRepository.findById(uploadFailRequestDto.movieId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.MOVIE_NOT_FOUND));
+
+        movie.updateStatus("FAILED_UPLOADING");
+        movieRepository.save(movie);
     }
 }

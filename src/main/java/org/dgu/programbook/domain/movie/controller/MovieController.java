@@ -3,6 +3,7 @@ package org.dgu.programbook.domain.movie.controller;
 import lombok.RequiredArgsConstructor;
 import org.dgu.programbook.domain.movie.dto.request.CreateMovieRequest;
 import org.dgu.programbook.domain.movie.dto.request.CompleteUploadRequestDto;
+import org.dgu.programbook.domain.movie.dto.request.UploadFailRequestDto;
 import org.dgu.programbook.domain.movie.service.MovieService;
 import org.dgu.programbook.global.common.SuccessResponse;
 import org.springframework.http.ResponseEntity;
@@ -47,5 +48,13 @@ public class MovieController {
             @RequestBody CompleteUploadRequestDto completeUploadRequestDto,
             @AuthenticationPrincipal Long userId) {
         return SuccessResponse.ok(movieService.completeUpload(completeUploadRequestDto, userId));
+    }
+
+    @PostMapping("/fail")
+    public ResponseEntity<SuccessResponse<?>> completeUploadMovie(
+            @RequestBody UploadFailRequestDto uploadFailRequestDto,
+            @AuthenticationPrincipal Long userId) {
+        movieService.failUpload(uploadFailRequestDto,userId);
+        return SuccessResponse.ok(null);
     }
 }
